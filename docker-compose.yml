@@ -6,21 +6,24 @@ services:
     image: frontend
     volumes:
       - ./certs:/etc/letsencrypt
-      - ./webroot:/var/www/html
-      - ./nginx/:/etc/nginx/conf.d
+	  - ./webroot:/var/www/html
+	  - nginx-config:/etc/nginx
     ports:
-      - "8080:80"
+      - "80:80"
+      - "443:443"
   certbot:
     image: certbot/certbot
     entrypoint: >
-      certbot certonly --webroot
-      --webroot-path=/var/www/html
+      certbot --nginx
       --staging
-      --email your@email.com
+      --email mockingbird48763@email.com
       --agree-tos
       --no-eff-email
       -d mockingbird48763.online
       -d www.mockingbird48763.online
     volumes:
-      - ./certs:/etc/letsencrypt         # 存憑證
-      - ./webroot:/var/www/html          # 挑戰檔掛載位置（跟 nginx 一樣）
+      - ./certs:/etc/letsencrypt
+	  - ./webroot:/var/www/html
+	  - nginx-config:/etc/nginx
+volumes:
+  nginx-config:

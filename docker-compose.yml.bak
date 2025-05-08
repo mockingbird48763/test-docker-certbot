@@ -1,0 +1,13 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: frontend
+    volumes:
+      - ./certs:/etc/letsencrypt
+      - nginx-config:/etc/nginx
+    ports:
+      - "8080:80"
+volumes:
+  nginx-config:
