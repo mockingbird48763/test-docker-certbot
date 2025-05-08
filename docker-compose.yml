@@ -1,0 +1,26 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: frontend
+    volumes:
+      - ./certs:/etc/letsencrypt
+      - ./webroot:/var/www/html
+      - ./nginx/:/etc/nginx/conf.d
+    ports:
+      - "8080:80"
+  certbot:
+    image: certbot/certbot
+    entrypoint: >
+      certbot certonly --webroot
+      --webroot-path=/var/www/html
+      --staging
+      --email your@email.com
+      --agree-tos
+      --no-eff-email
+      -d mockingbird48763.online
+      -d www.mockingbird48763.online
+    volumes:
+      - ./certs:/etc/letsencrypt         # 存憑證
+      - ./webroot:/var/www/html          # 挑戰檔掛載位置（跟 nginx 一樣）
